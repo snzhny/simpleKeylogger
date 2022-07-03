@@ -1,7 +1,7 @@
 <h1>Simple Keylogger</h1>
 
 <h2>VirusTotal report</h2>
-![изображение](https://user-images.githubusercontent.com/88938702/177054885-a727a734-6467-4201-b739-5dbc984a7606.png)
+![изображение](https://user-images.githubusercontent.com/88938702/177055622-fee16bb4-53b2-4176-b832-84fe0a560fc8.png)
 
 <h2>USAGE</h2>
 - open main.pyw
