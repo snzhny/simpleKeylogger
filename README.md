@@ -3,7 +3,6 @@
 <h2>VirusTotal report</h2>
 ![изображение](https://user-images.githubusercontent.com/88938702/177055622-fee16bb4-53b2-4176-b832-84fe0a560fc8.png)
 
-
 <h2>USAGE</h2>
 - open main.pyw
 - change email and login of gmail.com (u can use temp mail)
@@ -20,4 +19,4 @@
 
 <h2>Contact me on telegram</h2>
 
-[<img target="_blank" src="https://img.icons8.com/color/144/000000/telegram-app--v2.png" title="Telegram">](https://t.me/without_access)
+[<img target="_blank" src="https://img.icons8.com/color/98/000000/telegram-app--v2.png" title="Telegram">](https://t.me/without_access)
